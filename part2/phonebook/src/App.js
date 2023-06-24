@@ -69,10 +69,10 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       {filteredPersons.map(p => (
-        <>
+        <div key={p.name}>
           {p.name} {p.number}
           <br />
-        </>
+        </div>
       ))}
     </div>
   )
