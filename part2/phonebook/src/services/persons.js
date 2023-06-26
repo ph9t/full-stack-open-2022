@@ -12,6 +12,11 @@ const createEntry = newPerson => {
   return request.then(response => response.data)
 }
 
+const updateEntry = (id, newPerson) => {
+  const request = axios.put(`${baseUrl}/${id}`, newPerson)
+  return request.then(response => response.data)
+}
+
 const deleteEntry = id => {
   const request = axios.delete(`${baseUrl}/${id}`)
   return request
@@ -20,5 +25,6 @@ const deleteEntry = id => {
 export default {
   getAllEntries,
   createEntry,
+  updateEntry,
   deleteEntry,
 }

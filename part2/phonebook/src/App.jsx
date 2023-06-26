@@ -51,25 +51,39 @@ const App = () => {
   const handleSubmit = e => {
     e.preventDefault()
 
-    const personExists = persons.find(
+    const retrievedPerson = persons.find(
       p => p.name.toLowerCase() === newName.toLowerCase()
     )
 
-    if (personExists) {
-      alert(`${newName} is already added in the phonebook.`)
+    if (!retrievedPerson) {
+      const newPerson = {
+        name: newName,
+        number: newNumber,
+      }
+
+      personService.createEntry(newPerson).then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
+
       return
     }
 
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-    }
+    const confirmationMessage = `${retrievedPerson?.name} is already added to the phonebook. Replace the old number with a new one?`
+    const overridePerson = window.confirm(confirmationMessage)
 
-    personService.createEntry(newPerson).then(returnedPerson => {
-      setPersons(persons.concat(returnedPerson))
-      setNewName('')
-      setNewNumber('')
-    })
+    overridePerson &&
+      personService
+        .updateEntry(retrievedPerson.id, {
+          ...retrievedPerson,
+          number: newNumber,
+        })
+        .then(returnedPerson =>
+          setPersons(
+            persons.map(p => (p.id !== retrievedPerson.id ? p : returnedPerson))
+          )
+        )
   }
 
   const filteredPersons = persons.filter(p =>
