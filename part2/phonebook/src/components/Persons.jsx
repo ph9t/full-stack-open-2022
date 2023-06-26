@@ -1,11 +1,15 @@
-const Persons = ({ filteredPersons }) => {
+import Person from './Person'
+
+const Persons = ({ filteredPersons, deleteEntryOf }) => {
   return (
     <div>
       {filteredPersons.map(p => (
-        <div key={p.name}>
-          {p.name} {p.number}
-          <br />
-        </div>
+        <Person
+          key={p.id}
+          name={p.name}
+          number={p.number}
+          deletePerson={() => deleteEntryOf(p.id)}
+        />
       ))}
     </div>
   )

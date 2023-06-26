@@ -12,7 +12,13 @@ const createEntry = newPerson => {
   return request.then(response => response.data)
 }
 
+const deleteEntry = id => {
+  const request = axios.delete(`${baseUrl}/${id}`)
+  return request
+}
+
 export default {
   getAllEntries,
   createEntry,
+  deleteEntry,
 }

@@ -37,6 +37,17 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
+  const deleteEntryOf = id => {
+    const person = persons.find(p => p.id === id)
+    const confirmDelete = window.confirm(`Delete ${person.name}?`)
+
+    if (confirmDelete) {
+      personService
+        .deleteEntry(id)
+        .then(_ => setPersons(persons.filter(p => p.id !== id)))
+    }
+  }
+
   const handleSubmit = e => {
     e.preventDefault()
 
@@ -78,7 +89,10 @@ const App = () => {
         handleSubmit={handleSubmit}
       />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons
+        filteredPersons={filteredPersons}
+        deleteEntryOf={deleteEntryOf}
+      />
     </div>
   )
 }
