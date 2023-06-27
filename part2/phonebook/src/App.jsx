@@ -35,6 +35,13 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
+  const notify = (message, type, duration = 2000) => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification({ message: null, type: null })
+    }, duration)
+  }
+
   const deleteEntryOf = id => {
     const person = persons.find(p => p.id === id)
     const confirmDelete = window.confirm(`Delete ${person.name}?`)
@@ -44,14 +51,10 @@ const App = () => {
         .deleteEntry(id)
         .then(_ => setPersons(persons.filter(p => p.id !== id)))
         .catch(error => {
-          setNotification({
-            message: `Entry for ${person.name} has already been removed from the server.`,
-            type: 'err',
-          })
-          setTimeout(() => {
-            setNotification({ message: null, type: null })
-          }, 2000)
-
+          notify(
+            `Entry for ${person.name} has already been removed from the server.`,
+            'err'
+          )
           setPersons(persons.filter(p => p.id !== id))
         })
     }
@@ -76,10 +79,7 @@ const App = () => {
         setNewName('')
         setNewNumber('')
 
-        setNotification({ message: `Added ${returnedPerson.name}`, type: 'ok' })
-        setTimeout(() => {
-          setNotification({ message: null, type: null })
-        }, 2000)
+        notify(`Added ${returnedPerson.name}`, 'ok')
       })
 
       return
@@ -102,13 +102,7 @@ const App = () => {
           setNewNumber('')
         })
 
-      setNotification({
-        message: `Modified number for ${retrievedPerson.name}`,
-        type: 'ok',
-      })
-      setTimeout(() => {
-        setNotification({ message: null, type: null })
-      }, 2000)
+      notify(`Modified number for ${retrievedPerson.name}`, 'ok')
     }
   }
 
