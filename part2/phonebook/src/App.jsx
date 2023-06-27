@@ -12,7 +12,10 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
-  const [notification, setNotification] = useState(null)
+  const [notification, setNotification] = useState({
+    message: null,
+    type: null,
+  })
 
   useEffect(() => {
     personService.getAllEntries().then(initialPersons => {
@@ -40,6 +43,17 @@ const App = () => {
       personService
         .deleteEntry(id)
         .then(_ => setPersons(persons.filter(p => p.id !== id)))
+        .catch(error => {
+          setNotification({
+            message: `Entry for ${person.name} has already been removed from the server.`,
+            type: 'err',
+          })
+          setTimeout(() => {
+            setNotification({ message: null, type: null })
+          }, 2000)
+
+          setPersons(persons.filter(p => p.id !== id))
+        })
     }
   }
 
@@ -62,9 +76,9 @@ const App = () => {
         setNewName('')
         setNewNumber('')
 
-        setNotification(`Added ${returnedPerson.name}`)
+        setNotification({ message: `Added ${returnedPerson.name}`, type: 'ok' })
         setTimeout(() => {
-          setNotification(null)
+          setNotification({ message: null, type: null })
         }, 2000)
       })
 
@@ -88,9 +102,12 @@ const App = () => {
           setNewNumber('')
         })
 
-      setNotification(`Modified number for ${retrievedPerson.name}`)
+      setNotification({
+        message: `Modified number for ${retrievedPerson.name}`,
+        type: 'ok',
+      })
       setTimeout(() => {
-        setNotification(null)
+        setNotification({ message: null, type: null })
       }, 2000)
     }
   }
@@ -102,7 +119,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification notification={notification} />
       <Filter filter={nameFilter} handleFilterChange={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm
