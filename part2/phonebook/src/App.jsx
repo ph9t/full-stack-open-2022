@@ -79,11 +79,13 @@ const App = () => {
           ...retrievedPerson,
           number: newNumber,
         })
-        .then(returnedPerson =>
+        .then(returnedPerson => {
           setPersons(
             persons.map(p => (p.id !== retrievedPerson.id ? p : returnedPerson))
           )
-        )
+          setNewName('')
+          setNewNumber('')
+        })
   }
 
   const filteredPersons = persons.filter(p =>
