@@ -3,21 +3,16 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 
 import personService from './services/persons'
 
 const App = () => {
-  /* const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 },
-  ]) */
-
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService.getAllEntries().then(initialPersons => {
@@ -48,6 +43,7 @@ const App = () => {
     }
   }
 
+  // refactor this method
   const handleSubmit = e => {
     e.preventDefault()
 
@@ -65,6 +61,11 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+
+        setNotification(`Added ${returnedPerson.name}`)
+        setTimeout(() => {
+          setNotification(null)
+        }, 2000)
       })
 
       return
@@ -73,7 +74,7 @@ const App = () => {
     const confirmationMessage = `${retrievedPerson?.name} is already added to the phonebook. Replace the old number with a new one?`
     const overridePerson = window.confirm(confirmationMessage)
 
-    overridePerson &&
+    if (overridePerson) {
       personService
         .updateEntry(retrievedPerson.id, {
           ...retrievedPerson,
@@ -86,6 +87,12 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+
+      setNotification(`Modified number for ${retrievedPerson.name}`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 2000)
+    }
   }
 
   const filteredPersons = persons.filter(p =>
@@ -95,6 +102,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter filter={nameFilter} handleFilterChange={handleFilterChange} />
       <h3>add a new</h3>
       <PersonForm
