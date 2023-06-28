@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
+import Country from './components/Country'
+import CountryListItem from './components/CountryListItem'
+
 const App = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [allCountries, setAllCountries] = useState([])
@@ -23,28 +26,19 @@ const App = () => {
     display = <p>Too many matches specify another</p>
   } else if (filteredCountries.length > 1) {
     display = filteredCountries.map(c => (
-      <React.Fragment key={c.cca2}>
-        {c.name.common}
-        <br />
-      </React.Fragment>
+      <CountryListItem key={c.cca2} name={c.name.common} />
     ))
   } else if (filteredCountries.length == 1) {
     const targetCountry = filteredCountries[0]
-    console.log(targetCountry)
 
     display = (
-      <div>
-        <h2>{targetCountry.name.common}</h2>
-        capital {targetCountry.capital.join(',')} <br />
-        area {targetCountry.area}
-        <h3>languages:</h3>
-        <ul>
-          {Object.values(targetCountry.languages).map(l => (
-            <li key={l}>{l}</li>
-          ))}
-        </ul>
-        <img src={targetCountry.flags.png} />
-      </div>
+      <Country
+        name={targetCountry.name.common}
+        capital={targetCountry.capital}
+        area={targetCountry.area}
+        languages={targetCountry.languages}
+        flagUrl={targetCountry.flags.png}
+      />
     )
   }
 
