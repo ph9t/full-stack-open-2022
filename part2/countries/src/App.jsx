@@ -26,7 +26,11 @@ const App = () => {
     display = <p>Too many matches specify another</p>
   } else if (filteredCountries.length > 1) {
     display = filteredCountries.map(c => (
-      <CountryListItem key={c.cca2} name={c.name.common} />
+      <CountryListItem
+        key={c.cca2}
+        name={c.name.common}
+        show={() => setSearchQuery(c.name.common)}
+      />
     ))
   } else if (filteredCountries.length == 1) {
     const targetCountry = filteredCountries[0]

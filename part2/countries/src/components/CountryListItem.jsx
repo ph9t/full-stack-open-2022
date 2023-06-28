@@ -1,6 +1,6 @@
-const CountryListItem = ({ name }) => (
+const CountryListItem = ({ name, show }) => (
   <>
-    {name}
+    {name} <button onClick={show}>show</button>
     <br />
   </>
 )
