@@ -74,13 +74,19 @@ const App = () => {
         number: newNumber,
       }
 
-      personService.createEntry(newPerson).then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
+      personService
+        .createEntry(newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
 
-        notify(`Added ${returnedPerson.name}`, 'ok')
-      })
+          notify(`Added ${returnedPerson.name}`, 'ok')
+        })
+        .catch(error => {
+          console.log(error.response.data.error)
+          notify(error.response.data.error, 'err')
+        })
 
       return
     }
