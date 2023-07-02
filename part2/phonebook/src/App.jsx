@@ -106,9 +106,13 @@ const App = () => {
           )
           setNewName('')
           setNewNumber('')
-        })
 
-      notify(`Modified number for ${retrievedPerson.name}`, 'ok')
+          notify(`Modified number for ${retrievedPerson.name}`, 'ok')
+        })
+        .catch(error => {
+          console.log(error.response.data.error)
+          notify(error.response.data.error, 'err')
+        })
     }
   }
 
