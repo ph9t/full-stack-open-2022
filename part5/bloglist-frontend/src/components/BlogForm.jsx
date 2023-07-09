@@ -18,6 +18,10 @@ const BlogForm = ({ setBlogs, notify }) => {
         `a new blog ${savedBlog.title} by ${savedBlog.author} added`,
         'success'
       )
+
+      setTitle('')
+      setAuthor('')
+      setUrl('')
     } catch (exception) {
       notify(exception.response.data.error, 'error')
     }
