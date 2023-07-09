@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -10,6 +11,10 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState({
+    message: null,
+    type: null,
+  })
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -26,6 +31,13 @@ const App = () => {
     }
   }, [])
 
+  const notify = (message, type, timeout = 5000) => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification({ message: null, type: null })
+    }, timeout)
+  }
+
   const handleLogin = async e => {
     e.preventDefault()
 
@@ -38,7 +50,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log('ERROR', exception.response.data.error)
+      notify(exception.response.data.error, 'error')
     }
   }
 
@@ -51,6 +63,9 @@ const App = () => {
     return (
       <>
         <h2>login in to application</h2>
+        <h2></h2>
+        <Notification notification={notification} />
+
         <form onSubmit={handleLogin}>
           <div>
             username{' '}
@@ -77,11 +92,12 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification notification={notification} />
       <p>
         {user.name || user.username} logged in{' '}
         <button onClick={handleLogout}>logout</button>
       </p>
-      <BlogForm setBlogs={setBlogs} />
+      <BlogForm setBlogs={setBlogs} notify={notify} />
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
       ))}
