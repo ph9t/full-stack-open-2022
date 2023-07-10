@@ -24,5 +24,10 @@ const create = async newBlog => {
   return response.data
 }
 
+const update = async (id, updatedBlog) => {
+  const response = await axios.put(`${baseUrl}/${id}`, updatedBlog)
+  return response.data
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { setToken, getAll, create }
+export default { setToken, getAll, create, update }

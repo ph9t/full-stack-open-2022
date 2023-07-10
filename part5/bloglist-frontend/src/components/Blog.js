@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
-const Blog = ({ blog }) => {
+import BlogLikes from './BlogLikes'
+
+const Blog = ({ blog, setBlogs }) => {
   const [showFull, setShowFull] = useState(false)
 
   console.log(blog)
@@ -24,8 +26,7 @@ const Blog = ({ blog }) => {
       <div style={showFullStyle}>
         <div>{blog.url}</div>
         <div>
-          likes {blog.likes}
-          <button>like</button>
+          <BlogLikes blog={blog} setBlogs={setBlogs} />
         </div>
         <div>{blog.user.name || blog.user.username}</div>
       </div>
