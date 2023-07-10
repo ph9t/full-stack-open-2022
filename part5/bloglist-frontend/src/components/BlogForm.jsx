@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import blogService from '../services/blogs'
 
-const BlogForm = ({ setBlogs, notify }) => {
+const BlogForm = ({ setBlogs, notify, blogFormRef }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -18,6 +18,8 @@ const BlogForm = ({ setBlogs, notify }) => {
         `a new blog ${savedBlog.title} by ${savedBlog.author} added`,
         'success'
       )
+
+      blogFormRef.current.toggleVisibility()
 
       setTitle('')
       setAuthor('')
