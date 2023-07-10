@@ -91,6 +91,8 @@ const App = () => {
     )
   }
 
+  const sortedBlogs = blogs.sort((a, b) => a.likes - b.likes)
+
   return (
     <div>
       <h2>blogs</h2>
@@ -106,7 +108,7 @@ const App = () => {
           blogFormRef={blogFormRef}
         />
       </Toggable>
-      {blogs.map(blog => (
+      {sortedBlogs.map(blog => (
         <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
       ))}
     </div>
