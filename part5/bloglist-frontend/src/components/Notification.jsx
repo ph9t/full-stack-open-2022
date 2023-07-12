@@ -1,4 +1,7 @@
+import PropTypes from 'prop-types'
+
 import { TbCircleCheckFilled, TbExclamationCircle } from 'react-icons/tb'
+
 const Notification = ({ notification }) => {
   const { message, type } = notification
 
@@ -16,6 +19,10 @@ const Notification = ({ notification }) => {
       </div>
     </div>
   )
+}
+
+Notification.propTypes = {
+  notification: PropTypes.object.isRequired,
 }
 
 export default Notification
